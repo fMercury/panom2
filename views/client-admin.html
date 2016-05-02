@@ -216,16 +216,16 @@
                     </div>
                     <br>
                     <ul class="nav nav-tabs">
-                      <li class="active"><a href="#">Nuevo punto de interés</a></li>
-                      <li><a href="#">Editar punto de interés</a></li>
+                      <li ng-class="{active : hotspotTab==0 }"><a ng-click="switchHotspotTab(0)">Nuevo punto de interés</a></li>
+                      <li ng-class="{active : hotspotTab==1 }"><a ng-click="switchHotspotTab(1)">Editar punto de interés</a></li>
                     </ul>
-                      <div ng-hide="editing_hotspot">
+                      <div ng-hide="adding_hotspot || hotspotTab!=0">
                         <br>
                         <p> Selecciona un punto en la imagen panorámica para agregar puntos de interés. </p>
                         <button type="button" class="btn default-btn" ng-disabled="position_data==null"  ng-click="createHotspot();"> Agregar punto de interés </button>
                       </div>
                       <!--New hotspot menu-->
-                      <div ng-show="editing_hotspot">
+                      <div ng-show="adding_hotspot && hotspotTab==0">
                         <div class="input-group  input-el">
                           <select type="text" class="form-control" ng-model="newHotspot.type">
                             <option value="info"> Información </option>
@@ -247,6 +247,33 @@
                         </div>
                       </div>
                       <!--Edit hotspot menu-->
+                      <div ng-show="hotspotTab==1">
+                        <div class="input-group  input-el">
+
+                          <label for="hotspotpicker">Elegir punto de interés:</label>
+                          <div class="col-md-8" style="padding-left:0px;">
+                          <select id="hotspotpicker" class="form-control"  ng-init="currentHotspot=0;" ng-model="currentHotspot" ng-change="changeCurrentHotspot(currentHotspot)">
+                            <option ng-repeat="hotspot in pageContent.iframe_content.scenes[clAdCtrl.currentScene].hotSpots" ng-value="$index" ng-selected="$index==currentHotspot"> {{$index}} </option>
+                          </select>
+                          </div>
+                          <div class="col-md-4" style="padding-left:0px;">
+                            <button type="button" class="btn default-btn" ng-click="removeHotspot();" style="margin-top:0px;"> Eliminar punto de interés </button>
+                          </div>
+                        </div>
+                        <div class="input-group  input-el">
+                          <span class="input-group-addon" id="addon-section-title">Descripción</span>
+                          <input type="text" name="hotspotText" class="form-control"  ng-model="pageContent.iframe_content.scenes[clAdCtrl.currentScene].hotSpots[currentHotspot].text" aria-describedby="addon-section-title">
+                        </div>
+                        <div class="input-group  input-el" ng-show="pageContent.iframe_content.scenes[clAdCtrl.currentScene].hotSpots[currentHotspot].type=='scene'">
+                          <label for="scenepicker">Escena objetivo:</label>
+                          <select id="scenepicker" type="text" class="form-control" ng-model="pageContent.iframe_content.scenes[clAdCtrl.currentScene].hotSpots[currentHotspot].sceneId">
+                            <option ng-repeat="(key, val) in pageContent.iframe_content.scenes" value="{{key}}"> {{key}} </option>
+                          </select>
+                        </div>
+                        <div class="input-group  input-el">
+                          <button type="button" class="btn default-btn" ng-click="editHotspot();"> Previsualizar cambios </button>
+                        </div>
+                      </div>
                   </div>
                 </div>
 

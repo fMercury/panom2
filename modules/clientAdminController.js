@@ -8,12 +8,16 @@ angular.module('siteApp').controller("clientAdminController",["$scope","database
   $scope.myFiles=[];
   $scope.currentClient="Poids Plume";
   $scope.position_data=null;
-  $scope.editing_hotspot=false;
+  $scope.adding_hotspot=false;
   $scope.newHotspot = {};
   //view variables
   $scope.activeTab="page-admin";
   //Pannellum variables
   this.currentScene="";
+  $scope.hotspotTab=0;
+  $scope.currentHotspot=0;
+  $scope.hot_value=0;
+  $scope.eh={"circle":"hola"};
   //Admin connect
   client.emit("admin connect");
 
@@ -29,7 +33,6 @@ $scope.$watch(
   function () {
       return $window.viewer
   }, function(n,o){
-    console.log(n);
      $scope.viewer=n;
   }
 );
@@ -39,6 +42,7 @@ $scope.$watch(
       $scope.client = data[0];
       $scope.pageContent = $scope.client.page_content;
       self.currentScene=$scope.client.page_content.iframe_content.default.firstScene;
+      $scope.currentHotspot=0;
     });
   }
 
@@ -73,7 +77,6 @@ $scope.$watch(
     $scope.currentTab=value;
     $('#chatbox').animate({scrollTop: $('#chatbox')[0].scrollHeight});
     $("#message-area").focus();
-    console.log($scope.currentTab);
   }
 
   //Socket IO event handlers
@@ -167,8 +170,7 @@ $scope.$watch(
   }
 
   $scope.createHotspot = function(){
-    $scope.editing_hotspot=true;
-    console.log($scope.position_data);
+    $scope.adding_hotspot=true;
     $scope.newHotspot={
                 "pitch": $scope.position_data.pitch,
                 "yaw": $scope.position_data.yaw,
@@ -193,8 +195,32 @@ $scope.$watch(
       }
       hotspots.push($scope.newHotspot);
       $scope.pageContent.iframe_content.scenes[self.currentScene].hotSpots=hotspots;
-      $scope.editing_hotspot=false;
+      $scope.adding_hotspot=false;
       $scope.viewer.loadScene(self.currentScene,0,0,0);
+  }
+
+  $scope.changeCurrentHotspot=function(valor){
+    $scope.currentHotspot=valor;
+  }
+
+  $scope.removeHotspot=function(){
+      var hotspots = [];
+      for (i in $scope.pageContent.iframe_content.scenes[self.currentScene].hotSpots){
+        if (i!=$scope.currentHotspot){
+          hotspots.push($scope.pageContent.iframe_content.scenes[self.currentScene].hotSpots[i]);}
+      }
+      $scope.pageContent.iframe_content.scenes[self.currentScene].hotSpots=hotspots;
+      $scope.viewer.loadScene(self.currentScene,0,0,0);
+      $scope.currentHotspot='0';
+  }
+
+  $scope.editHotspot=function(){
+      $scope.viewer.loadScene(self.currentScene,0,0,0);
+  }
+
+  $scope.switchHotspotTab=function(val){
+    $scope.hotspotTab=val;
+    $scope.adding_hotspot=false;
   }
 
 }]);
