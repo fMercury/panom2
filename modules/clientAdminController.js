@@ -17,7 +17,17 @@ angular.module('siteApp').controller("clientAdminController",["$scope","database
   $scope.hotspotTab=0;
   $scope.currentHotspot=0;
   $scope.hot_value=0;
-  $scope.eh={"circle":"hola"};
+  $scope.showSceneMenu=false;
+  $scope.newScene = {"name" : "new-scene",
+                    "data" : {
+                            "hotSpots": [],
+                            "panorama": "../resources/client-content/pannellum-placeholder.jpg",
+                            "type": "equirectangular",
+                            "yaw": 5,
+                            "hfov": 110,
+                            "title": "New Scene"
+                        }
+                    };
   //Admin connect
   client.emit("admin connect");
 
@@ -47,6 +57,10 @@ $scope.$watch(
   }
 
   $scope.changeClient();
+
+  $scope.generateSceneName = function(){
+    $scope.newScene.name = $scope.newScene.data.title.split(' ').join('-').toLowerCase();
+  }
 
   $scope.getChatNumber=function(username){
     var i=0;
@@ -221,6 +235,43 @@ $scope.$watch(
   $scope.switchHotspotTab=function(val){
     $scope.hotspotTab=val;
     $scope.adding_hotspot=false;
+  }
+
+  $scope.removeScene = function(){
+    delete $scope.pageContent.iframe_content.scenes[self.currentScene];
+    var validKeys=[];
+    for (var key in $scope.pageContent.iframe_content.scenes) {
+      validKeys.push(key);
+    }
+    if (validKeys.length >0){
+      self.currentScene=validKeys[0];
+    }
+    $scope.viewer.loadScene(self.currentScene,0,0,0);
+  }
+
+  $scope.addScene = function(){
+    //upload
+    var file = $scope.myFiles[0];
+    var uploadUrl = '/uploadImage';
+    var serverpath ='/resources/client-content/';
+    fileUpload.uploadFileToUrl(file, uploadUrl,serverpath, function(filename){
+      $scope.newScene.data.panorama = "../resources/client-content/"+filename;
+      //update
+      $scope.pageContent.iframe_content.scenes[$scope.newScene.name] = $scope.newScene.data;
+      self.currentScene = $scope.newScene.name;
+      $scope.showSceneMenu=false;
+      $scope.viewer.loadScene(self.currentScene,0,0,0);
+    });
+  }
+
+  $scope.toggleSceneMenu = function(val){
+    $scope.showSceneMenu=val;
+  }
+
+  $scope.saveTour = function(){
+    database.updateClientPage($scope.client.name, $scope.pageContent,function(data){
+      alert("La modificación se completó con éxito.");
+    });
   }
 
 }]);
