@@ -238,15 +238,24 @@ $scope.$watch(
   }
 
   $scope.removeScene = function(){
-    delete $scope.pageContent.iframe_content.scenes[self.currentScene];
+    var erased =self.currentScene;
     var validKeys=[];
     for (var key in $scope.pageContent.iframe_content.scenes) {
-      validKeys.push(key);
+      if (key!=erased){
+        validKeys.push(key);
+      }
     }
     if (validKeys.length >0){
+      delete $scope.pageContent.iframe_content.scenes[self.currentScene];
       self.currentScene=validKeys[0];
+      if ($scope.pageContent.iframe_content.default.firstScene == erased){
+        $scope.pageContent.iframe_content.default.firstScene=validKeys[0];
+      }
+      $scope.viewer.loadScene(self.currentScene,0,0,0);
     }
-    $scope.viewer.loadScene(self.currentScene,0,0,0);
+    else{
+      alert("Esta es actualmente la única escena de la presentación! No se puede borrar. Agregue más escenas si desea borrar esta de modo que haya al menos una.");
+    }
   }
 
   $scope.addScene = function(){

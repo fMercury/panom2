@@ -203,6 +203,15 @@
                   </div>
                   <div class="col-md-7">
                     <div class="row">
+                      <h3> Tour </h3>
+                        <div style="padding-left:0px;">
+                          <label for="firstscenepicker">Escena inicial:</label>
+                          <select type="text" id="firstscenepicker" class="form-control" ng-model="pageContent.iframe_content.default.firstScene">
+                            <option ng-repeat="(key, val) in pageContent.iframe_content.scenes" value="{{key}}" ng-selected="pageContent.iframe_content.default.firstScene==key"> {{key}} </option>
+                          </select>
+                        </div>
+                    </div>
+                    <div class="row">
                       <h3> Escena </h3>
                       <br>
                       <div class="col-md-3" style="padding-left:0px;">
@@ -236,12 +245,14 @@
                       <br>
 
                       <div class="input-el">
-                        <div class="col-md-6">
-                          <p> Cargar imagen </p>
-                          <input type="file"  class="file-upper" file-model="myFile" index="0"/><br/>
-                        </div>
-                        <div class="col-md-6">
-                          <button type="button" class="btn default-btn" ng-click="addScene();"> Agregar escena </button>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <p> Cargar imagen </p>
+                            <input type="file"  class="file-upper" file-model="myFile" index="0"/><br/>
+                          </div>
+                          <div class="col-md-6">
+                            <button type="button" class="btn default-btn" ng-click="addScene();"> Agregar escena </button>
+                          </div>
                         </div>
                       </div>
                     </div>
