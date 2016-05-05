@@ -55,7 +55,12 @@ app.get('/client/:client_id', function(req, res){
 			res.sendFile(__dirname + '/views/error.html');
 		}
 		else{
-			res.sendFile(__dirname + '/views/client.html');
+        if (docs[0].enabled){
+          res.sendFile(__dirname + '/views/client.html');
+        }
+        else{
+          res.sendFile(__dirname + '/views/paypal.html');
+        }
 		}
 	});
 });
@@ -77,6 +82,12 @@ app.post('/addClient', function(req, res){
 
 app.post('/updateClientPage', function(req, res){
 	database.updateClientPage(req.body.client,req.body.data, function(){
+			res.end();
+	});
+});
+
+app.post('/updateClientEnabled', function(req, res){
+  database.updateClientEnabled(req.body.client,req.body.data, function(){
 			res.end();
 	});
 });

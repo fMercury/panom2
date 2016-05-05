@@ -62,6 +62,12 @@ $scope.$watch(
     $scope.newScene.name = $scope.newScene.data.title.split(' ').join('-').toLowerCase();
   }
 
+  $scope.saveEnabled = function(){
+    database.updateEnabled($scope.client.name, $scope.client.enabled,function(data){
+      alert("La modificación se completó con éxito.");
+    });
+  }
+
   $scope.getChatNumber=function(username){
     var i=0;
     var found=false;

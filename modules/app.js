@@ -81,6 +81,16 @@ app.service('database', ["$http", function($http) {
         alert("Error en el envío.");
     });
   };
+
+  //Get all clients
+  this.updateEnabled = function(clientName,pageData, callback){
+    $http.post('updateClientEnabled', {"client" : clientName, "data":pageData}).success(function(data){
+        callback(data);
+    }).error(function(){
+        alert("Error en el envío.");
+    });
+  };
+
 }]);
 
 app.service('fileUpload', ['$http', function ($http) {

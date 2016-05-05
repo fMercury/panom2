@@ -89,6 +89,14 @@
             <option value="Poids Plume"> Cliente de tour </option>
           </select>
           <hr>
+          <form id="enabled-form" name="enabledForm" class="form-horizontal" role="form" ng-submit="saveEnabled();">
+            <h2>Estado del sitio</h2>
+            <input checked type="radio" ng-value="false" ng-model="client.enabled" > Desactivado<br><input type="radio" ng-value="true" ng-model="client.enabled"> Activado
+            <div class="input-group input-el" style="display:flex; justify-content:space-between;">
+              <button type="submit" ng-disabled="enabledForm.$pristine" form="enabled-form" class="btn btn-default">Guardar </button> <span  ng-show="enabledForm.$submitted"><a target="_blank" ng-href="/client/{{client.web_url}}" style="color:#FF0080; text-decoration: underline;"> Ver cambios </a></span>
+            </div>
+          </form>
+          <hr>
           <form id="header-form" name="headerForm" class="form-horizontal" role="form" ng-submit="changePage();">
             <h2>Encabezado</h2>
             <div class="input-group  input-el">

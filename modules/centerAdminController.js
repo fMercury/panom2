@@ -47,6 +47,7 @@ angular.module('siteApp').controller("centerAdminController",["$scope","database
                       "image" : $scope.myFiles[0].name,               //hardcodero
                       "web_url": $scope.newClientUrl,
                       "template_type" : $scope.newClientTemplate,
+                      "enabled" : true,
                       "page_content" : {
                           title : "This is who we are.",
                           subtitle: "A summary of the services and products we offer for our customers. ",

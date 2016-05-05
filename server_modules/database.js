@@ -44,5 +44,18 @@ module.exports = function () {
       });
     };
 
+    module.updateClientEnabled = function(clientName,data, callback){
+      //docs will be an array
+      var client = schemas.clientModel();
+      schemas.clientModel.update({"name" : clientName}, {"enabled": data}, function (err) {
+        if (err){
+          console.log("Error guardando cliente.");
+        }
+        else{
+          callback();
+        }
+      });
+    };
+
     return module;
 }

@@ -7,6 +7,7 @@ module.exports = function (mongoose) {
       image : String,
       web_url: String,
       template_type : String,
+      enabled : Boolean,
       page_content: {
         title : String,
         subtitle: String,
