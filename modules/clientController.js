@@ -1,4 +1,4 @@
-angular.module('siteApp').controller("clientController",["$scope","$location","socket","database", function($scope,$location,client,database){
+angular.module('siteApp').controller("clientController",["$scope","$location","socket","database","$http", function($scope,$location,client,database,$http){
 
   $scope.user = "";
   $scope.mail="";
@@ -7,6 +7,7 @@ angular.module('siteApp').controller("clientController",["$scope","$location","s
   $scope.chat=[];
   $scope.noAdmins=false;
   $scope.loadComplete=false;
+  $scope.messageCache="";
 
   angular.element(document).ready(function () {
         $scope.loadComplete=true;
@@ -31,13 +32,18 @@ angular.module('siteApp').controller("clientController",["$scope","$location","s
   }
 
   $scope.sendMessage = function(){
+
     if (!$scope.noAdmins){
       var msg= {"username" : $scope.user, "mail":$scope.mail, "to": $scope.adminID, "message": $scope.currentMessage};
       client.emit("chat message", msg);
       $scope.chat.push(msg);
+      $scope.messageCache=$scope.currentMessage;
       $scope.currentMessage="";
       $("#message-area").focus();
       $('#chatbox').animate({scrollTop: $('#chatbox')[0].scrollHeight});
+    }
+    else{
+
     }
   };
 
@@ -47,6 +53,19 @@ angular.module('siteApp').controller("clientController",["$scope","$location","s
 
   client.on("no admins", function(){
     $scope.noAdmins=true;
+    if ($scope.noAdmins){
+      var msg= {"username" : $scope.user, "mail":$scope.mail, "to":$scope.pageContent.chat_email, "message": $scope.messageCache};
+      $http({
+          method: 'GET',
+          url: '/sendMessageEmail',
+          params: msg,
+       }).success(function(data){
+          alert("¡El mail ha sido enviado con éxito!");
+          location.reload();
+      }).error(function(){
+          alert("Error en el envío.");
+      });
+    }
   });
 
   client.on("send message", function(data){

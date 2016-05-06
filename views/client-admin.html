@@ -345,6 +345,10 @@
 
               <div class="col-md-2">
                 <h3> Chat </h3> <input type="radio"  ng-value="true" ng-model="pageContent.chat_enabled" checked> Activado <br><input type="radio" ng-value="false"   ng-model="pageContent.chat_enabled"> Desactivado<br>
+                <div class="input-group  input-el"  ng-show="pageContent.chat_enabled">
+                  <span class="input-group-addon" id="addon-title">Email</span>
+                  <input  type="text"  class="form-control" ng-model="pageContent.chat_email"  aria-describedby="addon-section-title">
+                </div>
               </div>
               <div class="col-md-2">
                 <h3> Facebook </h3> <input checked type="radio" ng-value="false" ng-model="pageContent.social_networks.facebook.enabled" > Desactivado<br><input type="radio" ng-value="true" ng-model="pageContent.social_networks.facebook.enabled"> Activado

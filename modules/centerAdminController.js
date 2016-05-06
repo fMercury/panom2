@@ -66,6 +66,7 @@ angular.module('siteApp').controller("centerAdminController",["$scope","database
                           }],
                           iframe_enabled : true,
                           chat_enabled : true,
+                          chat_email: "example@email.com",
                           iframe_content : {"type" : $scope.newClientTemplate},
                           social_networks: {
                               "facebook": {

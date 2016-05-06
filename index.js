@@ -167,6 +167,30 @@ app.get('/sendEmail', function(req, res){
 		});
 });
 
+//HTTP to send email to client
+app.get('/sendMessageEmail', function(req, res){
+	// create reusable transporter object using the default SMTP transport
+	// setup e-mail data with unicode symbols
+	var mailOptions = {
+	    to: req.query.to, // list of receivers
+	    subject: 'Has recibido un mensaje a tu chat', // Subject line
+	    html: ""
+	};
+	var mailBody= "<p> De: "+req.query.mail+"</p>";
+  mailBody+="<p>Usuario: "+req.query.to+"</p>";
+  mailBody+="<p>Mensaje: "+req.query.message+"</p>"
+	mailOptions.html=mailBody;
+
+	// send mail with defined transport object
+	transporter.sendMail(mailOptions, function(error, response){
+			if(error){
+				res.end('{"success" : "Sent Successfully", "status" : 200}');
+			}else{
+				res.end('{"error" : "Email error", "status" : 200}');
+			}
+		});
+});
+
 //Lets start our server
 server.listen(port, function(){
     //Callback triggered when server is successfully listening. Hurray!
